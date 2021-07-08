@@ -27,10 +27,26 @@ add_executable(dep_viewer
 
         src/base_classes/base_manager.h
         src/base_classes/base_loader.h
+        src/base_classes/base_command.h
+        src/base_classes/base_command.cpp
 
-        src/gui/mainwindow.h
-        src/gui/mainwindow.cpp
-        src/gui/mainwindow.ui
+        src/cmdhistory/cmdhistory_manager.h
+        src/cmdhistory/cmdhistory_manager.cpp
+        src/cmdhistory/cmdhistory_manager_creator.h
+        src/cmdhistory/cmdhistory_manager_creator.cpp
+
+        src/cmds/load_command.h
+        src/cmds/load_command.cpp
+        src/cmds/update_command.h
+        src/cmds/update_command.cpp
+        src/cmds/save_command.h
+        src/cmds/save_command.cpp
+        src/cmds/undo_command.h
+        src/cmds/undo_command.cpp
+        src/cmds/restore_command.h
+        src/cmds/restore_command.cpp
+        src/cmds/showdata_command.h
+        src/cmds/showdata_command.cpp
 
         src/dep/employment.h
         src/dep/employment.cpp
@@ -40,6 +56,11 @@ add_executable(dep_viewer
         src/dep/department_manager.cpp
         src/dep/department_manager_creator.h
         src/dep/department_manager_creator.cpp
+
+        src/gui/i_tableowner.h
+        src/gui/mainwindow.h
+        src/gui/mainwindow.cpp
+        src/gui/mainwindow.ui
 
         src/loading/load_manager.h
         src/loading/load_manager.cpp
@@ -52,8 +73,10 @@ add_executable(dep_viewer
 target_include_directories(dep_viewer PUBLIC
         src/
         src/base_classes/
-        src/gui/
+        src/cmdhistory/
+        src/cmds/
         src/dep/
+        src/gui/
         src/loading/
         )
 
