@@ -1,0 +1,9 @@
+# build dir
+
+**/cmake-build/**
+**/cmake-build-debug/**
+
+
+# vim files
+
+**/.*.swp
