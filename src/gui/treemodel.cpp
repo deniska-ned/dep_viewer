@@ -44,7 +44,12 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::NoItemFlags;
 
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    // column 1, 2 of departments
+    if (!index.parent().isValid()
+            && (1 == index.column() || 2 == index.column()))
+        return QAbstractItemModel::flags(index);
+    else
+        return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
 TreeItem *TreeModel::getItem(const QModelIndex &index) const
