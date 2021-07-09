@@ -10,7 +10,7 @@
 class base_command
 {
 public:
-    base_command(std::shared_ptr<i_tableowner> tableowner);
+    explicit base_command(i_tableowner *tableowner);
 
     virtual ~base_command() = 0;
 
@@ -24,7 +24,7 @@ public:
     virtual void undo();
 
 protected:
-    std::shared_ptr<i_tableowner> _tableowner;
+    i_tableowner *_tableowner;
     std::vector<department> _snapshot;
 
     virtual void _make_backup();

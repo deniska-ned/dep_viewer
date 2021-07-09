@@ -57,10 +57,16 @@ add_executable(dep_viewer
         src/dep/department_manager_creator.h
         src/dep/department_manager_creator.cpp
 
+        src/exceptions/errors.hpp
+
         src/gui/i_tableowner.h
         src/gui/mainwindow.h
         src/gui/mainwindow.cpp
         src/gui/mainwindow.ui
+        src/gui/treeitem.h
+        src/gui/treeitem.cpp
+        src/gui/treemodel.h
+        src/gui/treemodel.cpp
 
         src/loading/load_manager.h
         src/loading/load_manager.cpp
@@ -76,6 +82,7 @@ target_include_directories(dep_viewer PUBLIC
         src/cmdhistory/
         src/cmds/
         src/dep/
+        src/exceptions/
         src/gui/
         src/loading/
         )

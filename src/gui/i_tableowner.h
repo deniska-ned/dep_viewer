@@ -17,7 +17,7 @@ public:
     virtual std::string get_load_filename() = 0;
     virtual std::string get_save_filename() = 0;
 
-    virtual std::string show_message(std::string const& mes);
+    virtual void show_message(std::string const& mes) = 0;
 };
 
 #endif // I_TABLEOWNER_H
