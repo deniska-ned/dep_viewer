@@ -1,0 +1,20 @@
+# build dir
+
+**/build/**
+**/cmake-build/**
+**/cmake-build-debug/**
+
+
+# vim files
+
+**/.*.swp
+
+
+# ycm vim plugin cache dir
+
+**/.cache/**
+
+
+# qt ui header
+
+**/ui_*.h
