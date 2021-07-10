@@ -10,7 +10,9 @@ bool update_command::execute()
     tdata = department_manager_creator().get_manager()->get_departments();
     _tableowner->set_table_data(tdata);
 
-    return false;
+    _make_backup();
+
+    return true;
 }
 
 std::shared_ptr<base_command> update_command::clone()

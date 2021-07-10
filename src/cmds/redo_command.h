@@ -5,7 +5,7 @@
 #include "base_command.h"
 
 
-class restore_command: public base_command
+class redo_command: public base_command
 {
 public:
     using base_command::base_command;

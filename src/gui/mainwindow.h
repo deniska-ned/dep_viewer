@@ -8,7 +8,7 @@
 
 #include "i_tableowner.h"
 #include "load_command.h"
-#include "restore_command.h"
+#include "redo_command.h"
 #include "save_command.h"
 #include "showdata_command.h"
 #include "undo_command.h"
@@ -41,7 +41,7 @@ private:
     std::shared_ptr<Ui::mainwindow> _ui;
 
     std::shared_ptr<load_command> _load_command_ptr;
-    std::shared_ptr<restore_command> _restore_command_ptr;
+    std::shared_ptr<redo_command> _restore_command_ptr;
     std::shared_ptr<save_command> _save_command_ptr;
     std::shared_ptr<showdata_command> _showdata_command_ptr;
     std::shared_ptr<undo_command> _undo_command_ptr;
@@ -56,6 +56,8 @@ private:
 private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
 
     void onvaluechanged();
 

@@ -43,8 +43,8 @@ add_executable(dep_viewer
         src/cmds/save_command.cpp
         src/cmds/undo_command.h
         src/cmds/undo_command.cpp
-        src/cmds/restore_command.h
-        src/cmds/restore_command.cpp
+        src/cmds/redo_command.h
+        src/cmds/redo_command.cpp
         src/cmds/showdata_command.h
         src/cmds/showdata_command.cpp
 

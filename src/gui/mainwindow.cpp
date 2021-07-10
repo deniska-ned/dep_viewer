@@ -16,7 +16,7 @@ mainwindow::mainwindow(QWidget *parent)
     _ui->setupUi(this);
 
     _load_command_ptr = std::make_shared<load_command>(this);
-    _restore_command_ptr = std::make_shared<restore_command>(this);
+    _restore_command_ptr = std::make_shared<redo_command>(this);
     _save_command_ptr = std::make_shared<save_command>(this);
     _showdata_command_ptr = std::make_shared<showdata_command>(this);
     _undo_command_ptr = std::make_shared<undo_command>(this);
@@ -175,7 +175,10 @@ void mainwindow::show_message(std::string const& mes)
 void mainwindow::execute_command(std::shared_ptr<base_command> cmd)
 {
     if (cmd->execute())
-        cmdhistory_manager_creator().get_manager()->add_new(cmd);
+    {
+        auto history_man_ptr = cmdhistory_manager_creator().get_manager();
+        history_man_ptr->add_new(cmd);
+    }
 }
 
 void mainwindow::on_actionOpen_triggered()
@@ -190,6 +193,18 @@ void mainwindow::on_actionSave_triggered()
     qDebug("clicked");
 
     execute_command(_save_command_ptr);
+}
+
+void mainwindow::on_actionUndo_triggered()
+{
+    qDebug("clicked");
+    execute_command(_undo_command_ptr);
+}
+
+void mainwindow::on_actionRedo_triggered()
+{
+    qDebug("clicked");
+    execute_command(_restore_command_ptr);
 }
 
 void mainwindow::onvaluechanged()
