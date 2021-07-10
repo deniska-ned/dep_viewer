@@ -25,6 +25,11 @@ mainwindow::mainwindow(QWidget *parent)
     _model_ptr = std::make_shared<TreeModel>();
 
     _ui->treeView->setModel(_model_ptr.get());
+
+
+
+    connect(_model_ptr.get(), &QAbstractItemModel::dataChanged ,
+            this, &mainwindow::onvaluechanged);
 }
 
 mainwindow::~mainwindow()
@@ -33,10 +38,49 @@ mainwindow::~mainwindow()
 std::vector<department> mainwindow::get_table_data()
 {
     qDebug("called");
-    // TODO: implement method
 
-    std::vector<department> tmp;
-    return tmp;
+    std::vector<department> departments;
+
+    auto dep_index = _model_ptr->index(0, 0);
+
+    for ( size_t dep_row_i = 0;
+          dep_index.isValid();
+          ++dep_row_i, dep_index = dep_index.siblingAtRow(dep_row_i))
+    {
+        QString q_dep_name = _model_ptr->data(dep_index, Qt::DisplayRole).toString();
+        std::string dep_name = q_dep_name.toStdString();
+
+        department dep(dep_name);
+
+        std::vector<employment> employments;
+
+        auto emp_index = _model_ptr->index(0, 0, dep_index);
+        for (size_t emp_row_i = 0;
+             emp_index.isValid();
+             ++emp_row_i, emp_index = emp_index.siblingAtRow(emp_row_i))
+        {
+            QString q_emp_snm = _model_ptr->data(emp_index.siblingAtColumn(0), Qt::DisplayRole).toString();
+
+            // TODO: recode
+            QStringList l = q_emp_snm.split(" ");
+            std::string surname = l[0].toStdString();
+            std::string name = l[1].toStdString();
+            std::string middlename = l[2].toStdString();
+
+            std::string function = _model_ptr->data(emp_index.siblingAtColumn(1), Qt::DisplayRole).toString().toStdString();
+            int salary = _model_ptr->data(emp_index.siblingAtColumn(2), Qt::DisplayRole).toInt();
+
+            employment new_empl(surname, name, middlename, function, salary);
+
+            employments.push_back(new_empl);
+        }
+
+        dep.replace_employments(employments.begin(), employments.end());
+
+        departments.push_back(dep);
+    };
+
+    return departments;
 }
 
 void mainwindow::set_table_data(const std::vector<department> &departments)
@@ -85,6 +129,10 @@ void mainwindow::set_table_data(const std::vector<department> &departments)
     }
 
     _ui->treeView->setModel(_model_ptr.get());
+
+
+    connect(_model_ptr.get(), &QAbstractItemModel::dataChanged ,
+            this, &mainwindow::onvaluechanged);
 }
 
 std::string mainwindow::get_load_filename()
@@ -142,4 +190,10 @@ void mainwindow::on_actionSave_triggered()
     qDebug("clicked");
 
     execute_command(_save_command_ptr);
+}
+
+void mainwindow::onvaluechanged()
+{
+    qDebug("cell data changed");
+    execute_command(_update_command_ptr);
 }

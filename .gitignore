@@ -13,3 +13,8 @@
 # ycm vim plugin cache dir
 
 **/.cache/**
+
+
+# qt ui header
+
+**/ui_*.h

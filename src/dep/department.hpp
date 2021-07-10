@@ -43,6 +43,8 @@ void department::replace_employments(InputIt begin, InputIt end)
 
     for (InputIt it = begin; it != end; ++it)
         _employments.push_back(*it);
+
+    _avg_salary_update();
 }
 
 #endif // DEPARTMENT_H
