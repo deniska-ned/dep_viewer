@@ -6,8 +6,6 @@
 
 bool load_command::execute()
 {
-    _make_backup();
-
     std::string filename = _tableowner->get_load_filename();
 
     std::vector<department> tdata;
@@ -16,6 +14,8 @@ bool load_command::execute()
     department_manager_creator().get_manager()->set_departments(tdata);
 
     _tableowner->set_table_data(tdata);
+
+    _make_backup();
 
     return true;
 }

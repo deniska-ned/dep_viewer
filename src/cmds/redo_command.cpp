@@ -1,9 +1,9 @@
-#include "restore_command.h"
+#include "redo_command.h"
 
 #include "cmdhistory_manager_creator.h"
 
 
-bool restore_command::execute()
+bool redo_command::execute()
 {
     auto ch_man_ptr = cmdhistory_manager_creator().get_manager();
 
@@ -19,7 +19,7 @@ bool restore_command::execute()
     return false;
 }
 
-std::shared_ptr<base_command> restore_command::clone()
+std::shared_ptr<base_command> redo_command::clone()
 {
-    return std::make_shared<restore_command>(*this);
+    return std::make_shared<redo_command>(*this);
 }

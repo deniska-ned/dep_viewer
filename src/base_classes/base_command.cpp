@@ -3,7 +3,7 @@
 #include "department_manager_creator.h"
 
 
-base_command::base_command(std::shared_ptr<i_tableowner> tableowner)
+base_command::base_command(i_tableowner *tableowner)
     : _tableowner(tableowner)
 {}
 
