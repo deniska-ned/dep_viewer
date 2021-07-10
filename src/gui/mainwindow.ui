@@ -42,6 +42,9 @@
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionInsertEmployer"/>
+    <addaction name="actionInsertDepartment"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -65,6 +68,16 @@
   <action name="actionRedo">
    <property name="text">
     <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionInsertEmployer">
+   <property name="text">
+    <string>Insert employer</string>
+   </property>
+  </action>
+  <action name="actionInsertDepartment">
+   <property name="text">
+    <string>Insert department</string>
    </property>
   </action>
  </widget>

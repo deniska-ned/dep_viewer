@@ -63,9 +63,9 @@ std::vector<department> mainwindow::get_table_data()
 
             // TODO: recode
             QStringList l = q_emp_snm.split(" ");
-            std::string surname = l[0].toStdString();
-            std::string name = l[1].toStdString();
-            std::string middlename = l[2].toStdString();
+            std::string surname = l.count() >= 1 ? l[0].toStdString() : "surname";
+            std::string name = l.count() >= 2 ? l[1].toStdString() : "name";
+            std::string middlename = l.count() >= 3 ? l[2].toStdString(): "middlename";
 
             std::string function = _model_ptr->data(emp_index.siblingAtColumn(1), Qt::DisplayRole).toString().toStdString();
             int salary = _model_ptr->data(emp_index.siblingAtColumn(2), Qt::DisplayRole).toInt();
@@ -192,7 +192,8 @@ void mainwindow::on_actionSave_triggered()
 {
     qDebug("clicked");
 
-    execute_command(_save_command_ptr);
+    show_message("Not implemented");
+    // execute_command(_save_command_ptr);
 }
 
 void mainwindow::on_actionUndo_triggered()
@@ -212,3 +213,89 @@ void mainwindow::onvaluechanged()
     qDebug("cell data changed");
     execute_command(_update_command_ptr);
 }
+
+void mainwindow::_insert_empl()
+{
+    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+    QModelIndex empl_index;
+
+    if (!index.isValid()) // root item
+    {
+        this->show_message("Choose department first");
+        return;
+    }
+    else if (!_model_ptr->parent(index).isValid()) // index on dep row
+    {
+        _model_ptr->insertRow(0, index);
+        empl_index = _model_ptr->index(0, 0, index);
+    }
+    else // index on emp row
+    {
+        _model_ptr->insertRow(index.row() + 1, index.parent());
+        empl_index = _model_ptr->index(index.row() + 1, 0, index.parent());
+    }
+
+    _model_ptr->setData(_model_ptr->index(0, 0, empl_index.parent()),
+                        QVariant(QString("surname name middlename")));
+}
+
+void mainwindow::on_actionInsertEmployer_triggered()
+{
+    qDebug("clicked");
+    _insert_empl();
+}
+
+void mainwindow::on_actionInsertDepartment_triggered()
+{
+    qDebug("clicked");
+    show_message("Not implemented");
+}
+
+/*
+void mainwindow::insert_child()
+{
+    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+    QAbstractItemModel *model = _ui->treeView->model();
+
+    if (model->columnCount(index) == 0) {
+        if (!model->insertColumn(0, index))
+            return;
+    }
+
+    if (!model->insertRow(0, index))
+        return;
+
+    for (int column = 0; column < model->columnCount(index); ++column) {
+        const QModelIndex child = model->index(0, column, index);
+        model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+    }
+
+    view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
+                                            QItemSelectionModel::ClearAndSelect);
+    updateActions();
+}
+
+void MainWindow::insertRow()
+{
+    const QModelIndex index = view->selectionModel()->currentIndex();
+    QAbstractItemModel *model = view->model();
+
+    if (!model->insertRow(index.row()+1, index.parent()))
+        return;
+
+    updateActions();
+
+    for (int column = 0; column < model->columnCount(index.parent()); ++column) {
+        const QModelIndex child = model->index(index.row() + 1, column, index.parent());
+        model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+    }
+}
+
+void MainWindow::removeRow()
+{
+    const QModelIndex index = view->selectionModel()->currentIndex();
+    QAbstractItemModel *model = view->model();
+    if (model->removeRow(index.row(), index.parent()))
+        updateActions();
+}
+*/

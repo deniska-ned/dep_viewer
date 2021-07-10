@@ -53,13 +53,17 @@ private:
 
     static void execute_command(std::shared_ptr<base_command> cmd);
 
+    void _insert_empl();
+
 private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
+    void on_actionInsertEmployer_triggered();
+    void on_actionInsertDepartment_triggered();
+
 
     void onvaluechanged();
-
 };
 #endif // MAINWINDOW_H
