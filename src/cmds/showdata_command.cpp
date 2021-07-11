@@ -7,8 +7,7 @@ bool showdata_command::execute()
 {
     _make_backup();
 
-    std::vector<department> tdata;
-    tdata = department_manager_creator().get_manager()->get_departments();
+    auto tdata = department_manager_creator().get_manager()->get_departments();
     _tableowner->set_table_data(tdata);
 
     return true;

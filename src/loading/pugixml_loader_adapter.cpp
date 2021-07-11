@@ -3,7 +3,7 @@
 #include "pugixml.hpp"
 
 
-std::vector<department> pugixml_loader_adapter::load(
+std::shared_ptr<std::vector<department>> pugixml_loader_adapter::load(
         std::string const& filename)
 {
     pugi::xml_document doc;
@@ -15,7 +15,7 @@ std::vector<department> pugixml_loader_adapter::load(
         // TODO: add result check
     }
 
-    std::vector<department> departments;
+    auto departments_ptr = std::make_shared<std::vector<department>>();
 
     auto dep_nodes = doc.child("departments").children("department");
 
@@ -43,14 +43,14 @@ std::vector<department> pugixml_loader_adapter::load(
         department dep(dep_name);
         dep.replace_employments(dep_empls.begin(), dep_empls.end());
 
-        departments.push_back(dep);
+        departments_ptr->push_back(dep);
     }
 
-    return departments;
+    return departments_ptr;
 }
 
 void pugixml_loader_adapter::save(std::string const& filename,
-                                  std::vector<department> const& departments)
+                                  std::shared_ptr<std::vector<department>> departments)
 {
     // TODO: implement saving
 }

@@ -31,6 +31,11 @@ employment department::get_employment(std::size_t index) const
     return _employments.at(index);
 }
 
+std::vector<employment> const& department::get_employments() const
+{
+    return _employments;
+}
+
 void department::append_employment(employment const& new_employment)
 {
     _employments.push_back(new_employment);

@@ -8,8 +8,7 @@ bool save_command::execute()
 {
     std::string filename = _tableowner->get_save_filename();
 
-    std::vector<department> tdata;
-    tdata = department_manager_creator().get_manager()->get_departments();
+    auto tdata = department_manager_creator().get_manager()->get_departments();
     load_manager_creator().get_manager()->save(filename, tdata);
 
     return false;

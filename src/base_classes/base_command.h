@@ -25,7 +25,7 @@ public:
 
 protected:
     i_tableowner *_tableowner;
-    std::vector<department> _snapshot;
+    std::shared_ptr<std::vector<department>> _snapshot;
 
     virtual void _make_backup();
 };
