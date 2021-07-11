@@ -16,15 +16,18 @@ mainwindow::mainwindow(QWidget *parent)
     _ui->setupUi(this);
 
     _load_command_ptr = std::make_shared<load_command>(this);
-    _restore_command_ptr = std::make_shared<redo_command>(this);
+    _update_command_ptr = std::make_shared<update_command>(this);
     _save_command_ptr = std::make_shared<save_command>(this);
     _showdata_command_ptr = std::make_shared<showdata_command>(this);
     _undo_command_ptr = std::make_shared<undo_command>(this);
-    _update_command_ptr = std::make_shared<update_command>(this);
+    _redo_command_ptr = std::make_shared<redo_command>(this);
 
     _model_ptr = std::make_shared<TreeModel>();
 
     _ui->treeView->setModel(_model_ptr.get());
+
+    connect(_model_ptr.get(), &TreeModel::treeUpdated,
+            this, &mainwindow::onvaluechanged);
 }
 
 mainwindow::~mainwindow()
@@ -42,9 +45,7 @@ void mainwindow::set_table_data(
 {
     qDebug("called");
 
-    auto new_model_ptr = std::make_shared<TreeModel>(departments);
-    _ui->treeView->setModel(new_model_ptr.get());
-    _model_ptr = new_model_ptr;
+    _model_ptr->setVectorDataAsTree(departments);
 }
 
 std::string mainwindow::get_load_filename()
@@ -117,7 +118,7 @@ void mainwindow::on_actionUndo_triggered()
 void mainwindow::on_actionRedo_triggered()
 {
     qDebug("clicked");
-    execute_command(_restore_command_ptr);
+    execute_command(_redo_command_ptr);
 }
 
 void mainwindow::on_actionInsertEmployer_triggered()
@@ -134,6 +135,6 @@ void mainwindow::on_actionInsertDepartment_triggered()
 
 void mainwindow::onvaluechanged()
 {
-    qDebug("cell data changed");
+    qDebug("called");
     execute_command(_update_command_ptr);
 }

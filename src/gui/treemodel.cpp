@@ -169,19 +169,24 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     int depth = getDepth(index);
-    bool result;
+    bool result = false;
+    bool shouldBackup = false;
 
     TreeItem *item = getItem(index);
 
     if (EMPL_DEPTH == depth && 0 == index.column()
         && 3 != value.toString().split(" ").count())
+    // TODO: make check more strict
     {
         qInfo("Surname name middlename should be writted as 3 separated words");
+        // return the previous data
         result = item->setData(index.column(), item->data(index.column()));
+        shouldBackup = false;
     }
     else if (EMPL_DEPTH == depth && 2 == index.column())
     {
         result = item->setData(index.column(), value);
+        shouldBackup = result;
 
         if (result)
         {
@@ -194,12 +199,16 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
     else
     {
         result = item->setData(index.column(), value);
+        shouldBackup = result;
 
         if (result)
         {
             emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
         }
     }
+
+    if (shouldBackup)
+        emit treeUpdated();
 
     return result;
 }
@@ -264,6 +273,8 @@ void TreeModel::setVectorDataAsTree(
             emp_item_ptr->setData(2, salary);
         }
     }
+
+    emit layoutChanged();
 }
 
 std::shared_ptr<std::vector<department>> TreeModel::getTreeDataAsVector()

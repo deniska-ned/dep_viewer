@@ -43,6 +43,9 @@ public:
     void setVectorDataAsTree(std::shared_ptr<std::vector<department>> dep_ptr);
     std::shared_ptr<std::vector<department>> getTreeDataAsVector();
 
+signals:
+    void treeUpdated();
+
 private:
     TreeItem *getItem(const QModelIndex &index) const;
     int getDepth(QModelIndex index) const;

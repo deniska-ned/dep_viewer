@@ -41,7 +41,7 @@ private:
     std::shared_ptr<Ui::mainwindow> _ui;
 
     std::shared_ptr<load_command> _load_command_ptr;
-    std::shared_ptr<redo_command> _restore_command_ptr;
+    std::shared_ptr<redo_command> _redo_command_ptr;
     std::shared_ptr<save_command> _save_command_ptr;
     std::shared_ptr<showdata_command> _showdata_command_ptr;
     std::shared_ptr<undo_command> _undo_command_ptr;
