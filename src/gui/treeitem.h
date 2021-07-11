@@ -20,6 +20,7 @@ public:
     int childNumber() const;
     bool setData(int column, const QVariant &value);
 
+    double countAvgSalary();
 private:
     QVector<TreeItem*> childItems;
     QVector<QVariant> itemData;

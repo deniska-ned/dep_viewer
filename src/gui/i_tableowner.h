@@ -10,9 +10,9 @@
 class i_tableowner
 {
 public:
-    virtual std::vector<department> get_table_data() = 0;
+    virtual std::shared_ptr<std::vector<department>> get_table_data() = 0;
     virtual void set_table_data(
-            std::vector<department> const& departments) = 0;
+            std::shared_ptr<std::vector<department>> departments) = 0;
 
     virtual std::string get_load_filename() = 0;
     virtual std::string get_save_filename() = 0;

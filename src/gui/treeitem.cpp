@@ -79,3 +79,22 @@ bool TreeItem::setData(int column, const QVariant &value)
     itemData[column] = value;
     return true;
 }
+
+double TreeItem::countAvgSalary()
+{
+    if (nullptr == parent() /*root*/ || nullptr != parent()->parent())
+    {
+        return 0.0;
+    }
+    else
+    {
+        double sum = 0.0;
+
+        for (int i = 0; i < childCount(); ++i)
+            sum += child(i)->data(2).toDouble();
+
+        double avg_salary = sum / childCount();
+
+        return avg_salary;
+    }
+}

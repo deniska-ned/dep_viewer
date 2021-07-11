@@ -14,9 +14,9 @@
 class load_manager: public base_manager
 {
 public:
-    std::vector<department> load(std::string const& filename) const;
+    std::shared_ptr<std::vector<department>> load(std::string const& filename) const;
     void save(std::string const& filename,
-            std::vector<department> const& departments) const;
+              std::shared_ptr<std::vector<department>> departments) const;
 
 private:
     std::shared_ptr<base_loader> _loader_ptr = \

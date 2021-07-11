@@ -11,11 +11,12 @@
 class department_manager: base_manager
 {
 public:
-    std::vector<department> get_departments() const;
-    void set_departments(std::vector<department> const& new_departments);
+    std::shared_ptr<std::vector<department>> get_departments() const;
+    void set_departments_ptr(
+            std::shared_ptr<std::vector<department>> new_departments);
 
 private:
-    std::vector<department> _departments;
+    std::shared_ptr<std::vector<department>> _departments;
 };
 
 #endif // DEPARTMENT_MANAGER_H

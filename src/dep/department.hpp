@@ -20,6 +20,7 @@ public:
     double avg_salary() const;
 
     employment get_employment(std::size_t index) const;
+    std::vector<employment> const& get_employments() const;
     void append_employment(employment const& new_employment);
     void remove_employment(std::size_t index);
 

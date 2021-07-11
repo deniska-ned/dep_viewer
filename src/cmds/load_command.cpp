@@ -8,10 +8,10 @@ bool load_command::execute()
 {
     std::string filename = _tableowner->get_load_filename();
 
-    std::vector<department> tdata;
+    std::shared_ptr<std::vector<department>> tdata;
     tdata = load_manager_creator().get_manager()->load(filename);
 
-    department_manager_creator().get_manager()->set_departments(tdata);
+    department_manager_creator().get_manager()->set_departments_ptr(tdata);
 
     _tableowner->set_table_data(tdata);
 

@@ -5,8 +5,8 @@
 
 bool update_command::execute()
 {
-    std::vector<department> tdata = _tableowner->get_table_data();
-    department_manager_creator().get_manager()->set_departments(tdata);
+    auto tdata = _tableowner->get_table_data();
+    department_manager_creator().get_manager()->set_departments_ptr(tdata);
     tdata = department_manager_creator().get_manager()->get_departments();
     _tableowner->set_table_data(tdata);
 

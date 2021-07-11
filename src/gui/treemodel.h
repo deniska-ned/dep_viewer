@@ -1,11 +1,14 @@
 #ifndef TREEMODEL_H
 #define TREEMODEL_H
 
+#include <memory>
+
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
 
 #include "treeitem.h"
+#include "department.hpp"
 
 
 class TreeModel : public QAbstractItemModel
@@ -13,7 +16,7 @@ class TreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    TreeModel();
+    TreeModel(std::shared_ptr<std::vector<department>> dep_ptr = nullptr);
     ~TreeModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -37,10 +40,14 @@ public:
     bool removeRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) override;
 
+    void setVectorDataAsTree(std::shared_ptr<std::vector<department>> dep_ptr);
+    std::shared_ptr<std::vector<department>> getTreeDataAsVector();
+
 private:
     TreeItem *getItem(const QModelIndex &index) const;
+    int getDepth(QModelIndex index) const;
 
-    TreeItem *rootItem;
+    TreeItem *rootItem = nullptr;
 };
 
 #endif // TREEMODEL_H

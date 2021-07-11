@@ -29,8 +29,8 @@ public:
     ~mainwindow() override;
 
 
-    std::vector<department> get_table_data() override;
-    void set_table_data( std::vector<department> const& departments) override;
+    std::shared_ptr<std::vector<department>> get_table_data() override;
+    void set_table_data(std::shared_ptr<std::vector<department>> departments) override;
 
     std::string get_load_filename() override;
     std::string get_save_filename() override;
@@ -53,8 +53,6 @@ private:
 
     static void execute_command(std::shared_ptr<base_command> cmd);
 
-    void _insert_empl();
-
 private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
@@ -62,7 +60,6 @@ private slots:
     void on_actionRedo_triggered();
     void on_actionInsertEmployer_triggered();
     void on_actionInsertDepartment_triggered();
-
 
     void onvaluechanged();
 };
