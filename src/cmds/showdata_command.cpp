@@ -5,10 +5,10 @@
 
 bool showdata_command::execute()
 {
-    _make_backup();
+    make_backup();
 
     auto tdata = department_manager_creator().get_manager()->get_departments();
-    _tableowner->set_table_data(tdata);
+    tableowner_->set_table_data(tdata);
 
     return true;
 }

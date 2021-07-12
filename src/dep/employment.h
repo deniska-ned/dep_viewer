@@ -28,11 +28,11 @@ public:
     void set_salary(int const new_salary);
 
 private:
-    std::string _surname;
-    std::string _name;
-    std::string _middle_name;
-    std::string _function;
-    int _salary;
+    std::string surname_;
+    std::string name_;
+    std::string middle_name_;
+    std::string function_;
+    int salary_;
 };
 
 #endif // EMPLOYMENT_H

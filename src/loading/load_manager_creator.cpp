@@ -3,16 +3,16 @@
 
 std::shared_ptr<load_manager> load_manager_creator::get_manager()
 {
-    if (!_man_ptr)
+    if (!man_ptr_)
     {
-        _create_manager();
+        create_manager();
     }
 
-    return _man_ptr;
+    return man_ptr_;
 }
 
-void load_manager_creator::_create_manager()
+void load_manager_creator::create_manager()
 {
     static auto man_ptr = std::make_shared<load_manager>();
-    _man_ptr = man_ptr;
+    man_ptr_ = man_ptr;
 }

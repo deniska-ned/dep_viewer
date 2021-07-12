@@ -24,10 +24,10 @@ public:
     virtual void undo();
 
 protected:
-    i_tableowner *_tableowner;
-    std::shared_ptr<std::vector<department>> _snapshot;
+    i_tableowner *tableowner_;
+    std::shared_ptr<std::vector<department>> snapshot_;
 
-    virtual void _make_backup();
+    virtual void make_backup();
 };
 
 #endif // BASE_COMMAND_H

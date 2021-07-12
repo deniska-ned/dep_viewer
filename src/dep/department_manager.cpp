@@ -4,11 +4,11 @@
 
 std::shared_ptr<std::vector<department>> department_manager::get_departments() const
 {
-    return _departments;
+    return departments_;
 }
 
 void department_manager::set_departments_ptr(
         std::shared_ptr<std::vector<department>> new_departments)
 {
-    _departments = new_departments;
+    departments_ = new_departments;
 }

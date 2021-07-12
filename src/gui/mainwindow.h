@@ -28,31 +28,32 @@ public:
     explicit mainwindow(QWidget *parent = nullptr);
     ~mainwindow() override;
 
-
     std::shared_ptr<std::vector<department>> get_table_data() override;
-    void set_table_data(std::shared_ptr<std::vector<department>> departments) override;
+    void set_table_data(
+            std::shared_ptr<std::vector<department>> departments) override;
 
     std::string get_load_filename() override;
     std::string get_save_filename() override;
-    void set_save_filename(std::string const& filename);
+    void set_save_filename(std::string const& filename) override;
 
     void show_message(std::string const& mes) override;
 
 private:
-    std::shared_ptr<Ui::mainwindow> _ui;
+    std::shared_ptr<Ui::mainwindow> ui_;
 
-    std::shared_ptr<load_command> _load_command_ptr;
-    std::shared_ptr<redo_command> _redo_command_ptr;
-    std::shared_ptr<save_command> _save_command_ptr;
-    std::shared_ptr<showdata_command> _showdata_command_ptr;
-    std::shared_ptr<undo_command> _undo_command_ptr;
-    std::shared_ptr<update_command> _update_command_ptr;
+    std::shared_ptr<load_command> load_command_ptr_;
+    std::shared_ptr<redo_command> redo_command_ptr_;
+    std::shared_ptr<save_command> save_command_ptr_;
+    std::shared_ptr<showdata_command> showdata_command_ptr_;
+    std::shared_ptr<undo_command> undo_command_ptr_;
+    std::shared_ptr<update_command> update_command_ptr_;
 
-    std::string _src_filename;
+    std::string src_filename_;
 
-    std::shared_ptr<TreeModel> _model_ptr;
+    std::shared_ptr<TreeModel> model_ptr_;
 
     static void execute_command(std::shared_ptr<base_command> cmd);
+    void react_to_user_cell_changes();
 
 private slots:
     void on_actionOpen_triggered();
@@ -62,7 +63,5 @@ private slots:
     void on_actionInsertEmployer_triggered();
     void on_actionInsertDepartment_triggered();
     void on_actionRemoveRow_triggered();
-
-    void onvaluechanged();
 };
 #endif // MAINWINDOW_H

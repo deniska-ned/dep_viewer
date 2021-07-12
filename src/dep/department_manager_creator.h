@@ -13,7 +13,7 @@ public:
     std::shared_ptr<department_manager> get_manager();
 
 private:
-    std::shared_ptr<department_manager> _man_ptr;
+    std::shared_ptr<department_manager> man_ptr_;
 
     void _create_manager();
 };

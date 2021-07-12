@@ -16,7 +16,7 @@ public:
             std::shared_ptr<std::vector<department>> new_departments);
 
 private:
-    std::shared_ptr<std::vector<department>> _departments;
+    std::shared_ptr<std::vector<department>> departments_;
 };
 
 #endif // DEPARTMENT_MANAGER_H

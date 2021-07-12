@@ -11,23 +11,25 @@
 
 mainwindow::mainwindow(QWidget *parent)
     : QMainWindow(parent)
-    , _ui(new Ui::mainwindow)
+    , ui_(new Ui::mainwindow)
 {
-    _ui->setupUi(this);
+    ui_->setupUi(this);
 
-    _load_command_ptr = std::make_shared<load_command>(this);
-    _update_command_ptr = std::make_shared<update_command>(this);
-    _save_command_ptr = std::make_shared<save_command>(this);
-    _showdata_command_ptr = std::make_shared<showdata_command>(this);
-    _undo_command_ptr = std::make_shared<undo_command>(this);
-    _redo_command_ptr = std::make_shared<redo_command>(this);
+    load_command_ptr_ = std::make_shared<load_command>(this);
+    update_command_ptr_ = std::make_shared<update_command>(this);
+    save_command_ptr_ = std::make_shared<save_command>(this);
+    showdata_command_ptr_ = std::make_shared<showdata_command>(this);
+    undo_command_ptr_ = std::make_shared<undo_command>(this);
+    redo_command_ptr_ = std::make_shared<redo_command>(this);
 
-    _model_ptr = std::make_shared<TreeModel>();
+    model_ptr_ = std::make_shared<TreeModel>();
 
-    _ui->treeView->setModel(_model_ptr.get());
+    ui_->treeView->setModel(model_ptr_.get());
 
-    connect(_model_ptr.get(), &TreeModel::treeUpdated,
-            this, &mainwindow::onvaluechanged);
+    connect(model_ptr_.get(), &TreeModel::cellUpdatedByUser,
+            this, &mainwindow::react_to_user_cell_changes);
+
+    execute_command(update_command_ptr_);
 }
 
 mainwindow::~mainwindow()
@@ -37,7 +39,7 @@ std::shared_ptr<std::vector<department>> mainwindow::get_table_data()
 {
     qDebug("called");
 
-    return _model_ptr->getTreeDataAsVector();
+    return model_ptr_->getAllData();
 }
 
 void mainwindow::set_table_data(
@@ -45,7 +47,7 @@ void mainwindow::set_table_data(
 {
     qDebug("called");
 
-    _model_ptr->setVectorDataAsTree(departments);
+    model_ptr_->replaceAllData(departments);
 }
 
 std::string mainwindow::get_load_filename()
@@ -62,12 +64,12 @@ std::string mainwindow::get_save_filename()
 {
     qDebug("called");
 
-    return _src_filename;
+    return src_filename_;
 }
 
 void mainwindow::set_save_filename(std::string const& filename)
 {
-    _src_filename = filename;
+    src_filename_ = filename;
 }
 
 void mainwindow::show_message(std::string const& mes)
@@ -88,57 +90,63 @@ void mainwindow::execute_command(std::shared_ptr<base_command> cmd)
     }
 }
 
+void mainwindow::react_to_user_cell_changes()
+{
+    qDebug("called");
+    execute_command(update_command_ptr_);
+}
+
 void mainwindow::on_actionOpen_triggered()
 {
     qDebug("clicked");
 
-    execute_command(_load_command_ptr);
+    execute_command(load_command_ptr_);
 }
 
 void mainwindow::on_actionSave_triggered()
 {
     qDebug("clicked");
-    execute_command(_save_command_ptr);
+    execute_command(save_command_ptr_);
 }
 
 void mainwindow::on_actionUndo_triggered()
 {
     qDebug("clicked");
-    execute_command(_undo_command_ptr);
+    execute_command(undo_command_ptr_);
 }
 
 void mainwindow::on_actionRedo_triggered()
 {
     qDebug("clicked");
-    execute_command(_redo_command_ptr);
+    execute_command(redo_command_ptr_);
 }
 
 void mainwindow::on_actionInsertEmployer_triggered()
 {
     qDebug("clicked");
-    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+    const QModelIndex index = ui_->treeView->selectionModel()->currentIndex();
 
-    _model_ptr->insertEmployee(index);
+    model_ptr_->insertEmployee(index);
+
+    execute_command(update_command_ptr_);
 }
 
 void mainwindow::on_actionInsertDepartment_triggered()
 {
     qDebug("clicked");
-    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+    const QModelIndex index = ui_->treeView->selectionModel()->currentIndex();
 
-    _model_ptr->insertDepartment(index);
-}
+    model_ptr_->insertDepartment(index);
 
-void mainwindow::onvaluechanged()
-{
-    qDebug("called");
-    execute_command(_update_command_ptr);
+    execute_command(update_command_ptr_);
 }
 
 void mainwindow::on_actionRemoveRow_triggered()
 {
     qDebug("called");
 
-    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
-    _model_ptr->removeRow(index.row(), index.parent());
+    const QModelIndex index = ui_->treeView->selectionModel()->currentIndex();
+    model_ptr_->removeRow(index.row(), index.parent());
+
+    execute_command(update_command_ptr_);
 }

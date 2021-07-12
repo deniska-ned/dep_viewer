@@ -73,7 +73,7 @@
     <string>Undo</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Left</string>
+    <string>Ctrl+Z</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -81,7 +81,7 @@
     <string>Redo</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Right</string>
+    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="actionInsertEmployer">

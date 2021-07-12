@@ -9,7 +9,7 @@ bool undo_command::execute()
 
     if (!ch_man_ptr->has_prev())
     {
-        _tableowner->show_message("Cannot go back any more");
+        tableowner_->show_message("Cannot go back any more");
     }
     else
     {

@@ -21,8 +21,9 @@ public:
     void goto_next();
 
 private:
-    std::deque<std::shared_ptr<base_command>> _deque;
-    std::deque<std::shared_ptr<base_command>>::iterator _it = _deque.end();
+    std::deque<std::shared_ptr<base_command>> deque_;
+
+    size_t next_i_ = 0;
 };
 
 #endif // CMDHISTORY_MANAGER_H

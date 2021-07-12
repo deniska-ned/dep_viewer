@@ -4,7 +4,7 @@
 
 
 base_command::base_command(i_tableowner *tableowner)
-    : _tableowner(tableowner)
+    : tableowner_(tableowner)
 {}
 
 base_command::~base_command()
@@ -12,11 +12,10 @@ base_command::~base_command()
 
 void base_command::undo()
 {
-    _tableowner->set_table_data(_snapshot);
-    department_manager_creator().get_manager()->set_departments_ptr(_snapshot);
+    tableowner_->set_table_data(snapshot_);
 }
 
-void base_command::_make_backup()
+void base_command::make_backup()
 {
-    _snapshot = std::make_shared<std::vector<department>>(*_tableowner->get_table_data());
+    snapshot_ = std::make_shared<std::vector<department>>(*tableowner_->get_table_data());
 }

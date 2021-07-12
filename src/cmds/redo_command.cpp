@@ -9,7 +9,7 @@ bool redo_command::execute()
 
     if (!ch_man_ptr->has_next())
     {
-        _tableowner->show_message("Cannot go forward any more");
+        tableowner_->show_message("Cannot go forward any more");
     }
     else
     {

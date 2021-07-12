@@ -13,7 +13,12 @@
 
 TreeModel::TreeModel(std::shared_ptr<std::vector<department>> dep_ptr)
 {
-    setVectorDataAsTree(dep_ptr);
+    rootItem = new TreeItem({ "Наим. подр. / ФИО",
+                              "Кол-во сотр. / Должность",
+                              "Ср. зарплата / Зарплата"
+                            });
+
+    replaceAllData(dep_ptr);
 }
 
 TreeModel::~TreeModel()
@@ -122,11 +127,6 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
                                                     rootItem->columnCount());
     endInsertRows();
 
-    if (success)
-    {
-        emit treeUpdated();
-    }
-
     return success;
 }
 
@@ -153,11 +153,6 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
     beginRemoveRows(parent, position, position + rows - 1);
     const bool success = parentItem->removeChildren(position, rows);
     endRemoveRows();
-
-    if (success)
-    {
-        emit treeUpdated();
-    }
 
     return success;
 }
@@ -218,7 +213,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
 
     if (shouldBackup)
-        emit treeUpdated();
+        emit cellUpdatedByUser();
 
     return result;
 }
@@ -237,14 +232,10 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void TreeModel::setVectorDataAsTree(
+void TreeModel::replaceAllData(
         std::shared_ptr<std::vector<department>> dep_ptr)
 {
-    delete rootItem;
-    rootItem = new TreeItem({ "Наим. подр. / ФИО",
-                              "Кол-во сотр. / Должность",
-                              "Ср. зарплата / Зарплата"
-                            });
+    removeRows(0, rowCount(QModelIndex()), QModelIndex());
 
     if (nullptr == dep_ptr)
         return;
@@ -283,11 +274,9 @@ void TreeModel::setVectorDataAsTree(
             emp_item_ptr->setData(2, salary);
         }
     }
-
-    emit layoutChanged();
 }
 
-std::shared_ptr<std::vector<department>> TreeModel::getTreeDataAsVector()
+std::shared_ptr<std::vector<department>> TreeModel::getAllData()
 {
     auto departments_ptr = std::make_shared<std::vector<department>>();
 
@@ -344,17 +333,33 @@ bool TreeModel::insertDepartment(QModelIndex curr_index)
     bool res = false;
     int depth = getDepth(curr_index);
 
-    if (ROOT_DEPTH == depth)
+    if (ROOT_DEPTH == depth || DEPA_DEPTH == depth || EMPL_DEPTH == depth)
     {
-        res = insertRows(0, 1, curr_index);
-    }
-    else if (DEPA_DEPTH == depth)
-    {
-        res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
-    }
-    else if (EMPL_DEPTH == depth)
-    {
-        res = insertRows(curr_index.parent().row() + 1, 1, curr_index.parent().parent());
+        TreeItem *item = nullptr;
+
+        if (ROOT_DEPTH == depth)
+        {
+            res = insertRows(0, 1, curr_index);
+
+            item = getItem(index(0, 0, QModelIndex()));
+        }
+        else if (DEPA_DEPTH == depth)
+        {
+            res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
+
+            item = getItem(index(curr_index.row() + 1, 0,
+                                 curr_index.parent()));
+        }
+        else if (EMPL_DEPTH == depth)
+        {
+            res = insertRows(curr_index.parent().row() + 1, 1,
+                             curr_index.parent().parent());
+
+            item = getItem(index(curr_index.parent().row() + 1, 0,
+                                 curr_index.parent().parent()));
+        }
+        if (nullptr != item)
+            item->setData(0, QVariant(QString("Название подразделения")));
     }
 
     return res;
@@ -365,16 +370,27 @@ bool TreeModel::insertEmployee(QModelIndex curr_index)
     bool res = false;
     int depth = getDepth(curr_index);
 
-    if (ROOT_DEPTH == depth)
+    if (DEPA_DEPTH == depth || EMPL_DEPTH == depth)
     {
-    }
-    else if (DEPA_DEPTH == depth)
-    {
-        res = insertRows(0, 1, curr_index);
-    }
-    else if (EMPL_DEPTH == depth)
-    {
-        res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
+        TreeItem *item = nullptr;
+
+        if (DEPA_DEPTH == depth)
+        {
+            res = insertRows(0, 1, curr_index);
+            item = getItem(index(0, 0, curr_index));
+        }
+        else if (EMPL_DEPTH == depth)
+        {
+            res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
+            item = getItem( curr_index.sibling(curr_index.row() + 1, 0));
+        }
+
+        if (nullptr != item)
+        {
+            item->setData(0, QVariant(QString("Фамилия Имя Отчество")));
+            item->setData(1, QVariant(QString("Должность")));
+            item->setData(2, QVariant(0));
+        }
     }
 
     return res;

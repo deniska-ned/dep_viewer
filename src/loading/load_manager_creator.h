@@ -13,9 +13,9 @@ public:
     std::shared_ptr<load_manager> get_manager();
 
 private:
-    std::shared_ptr<load_manager> _man_ptr;
+    std::shared_ptr<load_manager> man_ptr_;
 
-    void _create_manager();
+    void create_manager();
 };
 
 #endif // LOAD_MANAGER_CREATOR_H

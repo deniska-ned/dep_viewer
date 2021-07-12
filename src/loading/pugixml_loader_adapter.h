@@ -7,7 +7,8 @@
 
 class pugixml_loader_adapter: public base_loader
 {
-    std::shared_ptr<std::vector<department>> load(std::string const& filename) override;
+    std::shared_ptr<std::vector<department>> load(
+            std::string const& filename) override;
     void save(std::string const& filename,
               std::shared_ptr<std::vector<department>> departments) override;
 };
