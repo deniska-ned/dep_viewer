@@ -22,7 +22,8 @@ public:
 
 private:
     std::deque<std::shared_ptr<base_command>> _deque;
-    std::deque<std::shared_ptr<base_command>>::iterator _it = _deque.end();
+
+    size_t next_i = 0;
 };
 
 #endif // CMDHISTORY_MANAGER_H
