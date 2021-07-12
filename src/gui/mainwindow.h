@@ -60,6 +60,7 @@ private slots:
     void on_actionRedo_triggered();
     void on_actionInsertEmployer_triggered();
     void on_actionInsertDepartment_triggered();
+    void on_actionRemoveRow_triggered();
 
     void onvaluechanged();
 };

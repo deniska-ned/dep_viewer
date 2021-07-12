@@ -124,17 +124,29 @@ void mainwindow::on_actionRedo_triggered()
 void mainwindow::on_actionInsertEmployer_triggered()
 {
     qDebug("clicked");
-    show_message("Not implemented");
+    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+
+    _model_ptr->insertEmployee(index);
 }
 
 void mainwindow::on_actionInsertDepartment_triggered()
 {
     qDebug("clicked");
-    show_message("Not implemented");
+    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+
+    _model_ptr->insertDepartment(index);
 }
 
 void mainwindow::onvaluechanged()
 {
     qDebug("called");
     execute_command(_update_command_ptr);
+}
+
+void mainwindow::on_actionRemoveRow_triggered()
+{
+    qDebug("called");
+
+    const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
+    _model_ptr->removeRow(index.row(), index.parent());
 }

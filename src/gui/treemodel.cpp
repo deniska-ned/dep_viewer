@@ -122,6 +122,11 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
                                                     rootItem->columnCount());
     endInsertRows();
 
+    if (success)
+    {
+        emit treeUpdated();
+    }
+
     return success;
 }
 
@@ -148,6 +153,11 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
     beginRemoveRows(parent, position, position + rows - 1);
     const bool success = parentItem->removeChildren(position, rows);
     endRemoveRows();
+
+    if (success)
+    {
+        emit treeUpdated();
+    }
 
     return success;
 }
@@ -327,4 +337,45 @@ int TreeModel::getDepth(QModelIndex index) const
     }
 
     return depth;
+}
+
+bool TreeModel::insertDepartment(QModelIndex curr_index)
+{
+    bool res = false;
+    int depth = getDepth(curr_index);
+
+    if (ROOT_DEPTH == depth)
+    {
+        res = insertRows(0, 1, curr_index);
+    }
+    else if (DEPA_DEPTH == depth)
+    {
+        res = insertRows(curr_index.row(), 1, curr_index.parent());
+    }
+    else if (EMPL_DEPTH == depth)
+    {
+        res = insertRows(curr_index.parent().row(), 1, curr_index.parent().parent());
+    }
+
+    return res;
+}
+
+bool TreeModel::insertEmployee(QModelIndex curr_index)
+{
+    bool res = false;
+    int depth = getDepth(curr_index);
+
+    if (ROOT_DEPTH == depth)
+    {
+    }
+    else if (DEPA_DEPTH == depth)
+    {
+        res = insertRows(0, 1, curr_index);
+    }
+    else if (EMPL_DEPTH == depth)
+    {
+        res = insertRows(curr_index.column(), 1, curr_index.parent());
+    }
+
+    return res;
 }

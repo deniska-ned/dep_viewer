@@ -45,6 +45,8 @@
     <addaction name="separator"/>
     <addaction name="actionInsertEmployer"/>
     <addaction name="actionInsertDepartment"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemoveRow"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -78,6 +80,11 @@
   <action name="actionInsertDepartment">
    <property name="text">
     <string>Insert department</string>
+   </property>
+  </action>
+  <action name="actionRemoveRow">
+   <property name="text">
+    <string>Remove row</string>
    </property>
   </action>
  </widget>
