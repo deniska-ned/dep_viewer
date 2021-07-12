@@ -21,8 +21,6 @@ bool load_command::execute()
         std::shared_ptr<std::vector<department>> tdata;
         tdata = load_manager_creator().get_manager()->load(filename);
 
-        department_manager_creator().get_manager()->set_departments_ptr(tdata);
-
         _tableowner->set_table_data(tdata);
 
         _make_backup();

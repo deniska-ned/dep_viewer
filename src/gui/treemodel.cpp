@@ -13,6 +13,11 @@
 
 TreeModel::TreeModel(std::shared_ptr<std::vector<department>> dep_ptr)
 {
+    rootItem = new TreeItem({ "Наим. подр. / ФИО",
+                              "Кол-во сотр. / Должность",
+                              "Ср. зарплата / Зарплата"
+                            });
+
     setVectorDataAsTree(dep_ptr);
 }
 
@@ -122,11 +127,6 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
                                                     rootItem->columnCount());
     endInsertRows();
 
-    if (success)
-    {
-        emit treeUpdated();
-    }
-
     return success;
 }
 
@@ -153,11 +153,6 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
     beginRemoveRows(parent, position, position + rows - 1);
     const bool success = parentItem->removeChildren(position, rows);
     endRemoveRows();
-
-    if (success)
-    {
-        emit treeUpdated();
-    }
 
     return success;
 }
@@ -218,7 +213,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
 
     if (shouldBackup)
-        emit treeUpdated();
+        emit cellUpdatedByUser();
 
     return result;
 }
@@ -240,11 +235,7 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
 void TreeModel::setVectorDataAsTree(
         std::shared_ptr<std::vector<department>> dep_ptr)
 {
-    delete rootItem;
-    rootItem = new TreeItem({ "Наим. подр. / ФИО",
-                              "Кол-во сотр. / Должность",
-                              "Ср. зарплата / Зарплата"
-                            });
+    removeRows(0, rowCount());
 
     if (nullptr == dep_ptr)
         return;
@@ -283,8 +274,6 @@ void TreeModel::setVectorDataAsTree(
             emp_item_ptr->setData(2, salary);
         }
     }
-
-    emit layoutChanged();
 }
 
 std::shared_ptr<std::vector<department>> TreeModel::getTreeDataAsVector()

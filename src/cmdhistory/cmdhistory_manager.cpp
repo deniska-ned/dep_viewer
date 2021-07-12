@@ -5,39 +5,34 @@ void cmdhistory_manager::add_new(std::shared_ptr<base_command> cmd)
 {
     std::shared_ptr<base_command> cmd_clone = cmd->clone();
 
-    if (_deque.empty())
-    {
-        _deque.push_back(cmd_clone);
-        _it = _deque.begin();
-    }
-    else
-    {
-        _deque.erase(_it + 1, _deque.end());
-        _deque.push_back(cmd_clone);
-        ++_it;
-    }
+    auto next_it = _deque.begin();
+    advance(next_it, next_i);
+    _deque.erase(next_it, _deque.end());
+
+    _deque.push_back(cmd_clone);
+    ++next_i;
 }
 
 bool cmdhistory_manager::has_prev()
 {
-    return _it != _deque.begin();
+    return next_i > 1;
 }
 
 void cmdhistory_manager::goto_prev()
 {
     // TODO: add throwing exception
-    --_it;
-    (*_it)->undo();
+    --next_i;
+    _deque[next_i - 1]->undo();
 }
 
 bool cmdhistory_manager::has_next()
 {
-    return (_it + 1) != _deque.end();
+    return next_i != _deque.size();
 }
 
 void cmdhistory_manager::goto_next()
 {
     // TODO: add throwing exception
-    ++_it;
-    (*_it)->undo();
+    ++next_i;
+    _deque[next_i - 1]->undo();
 }
