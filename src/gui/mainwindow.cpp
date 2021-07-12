@@ -76,6 +76,11 @@ std::string mainwindow::get_save_filename()
     return _src_filename;
 }
 
+void mainwindow::set_save_filename(std::string const& filename)
+{
+    _src_filename = filename;
+}
+
 void mainwindow::show_message(std::string const& mes)
 {
     qDebug("called");
@@ -104,9 +109,7 @@ void mainwindow::on_actionOpen_triggered()
 void mainwindow::on_actionSave_triggered()
 {
     qDebug("clicked");
-
-    show_message("Not implemented");
-    // execute_command(_save_command_ptr);
+    execute_command(_save_command_ptr);
 }
 
 void mainwindow::on_actionUndo_triggered()
