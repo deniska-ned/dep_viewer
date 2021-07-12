@@ -8,8 +8,15 @@ bool save_command::execute()
 {
     std::string filename = _tableowner->get_save_filename();
 
-    auto tdata = _tableowner->get_table_data();
-    load_manager_creator().get_manager()->save(filename, tdata);
+    if (filename.empty())
+    {
+        _tableowner->show_message("Load file first");
+    }
+    else
+    {
+        auto tdata = _tableowner->get_table_data();
+        load_manager_creator().get_manager()->save(filename, tdata);
+    }
 
     return false;
 }

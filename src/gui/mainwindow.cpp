@@ -52,26 +52,15 @@ std::string mainwindow::get_load_filename()
 {
     qDebug("called");
 
-    QString filename = QFileDialog::getOpenFileName();
+    QString qstr_filename = QFileDialog::getOpenFileName();
 
-    if (filename.isEmpty())
-    {
-        show_message("File is not selected");
-        throw app_filename_not_selected();
-    }
-    else
-    {
-        std::string s_filename(filename.toUtf8().data());
-        return s_filename;
-    }
+    std::string filename(qstr_filename.toUtf8().data());
+    return filename;
 }
 
 std::string mainwindow::get_save_filename()
 {
     qDebug("called");
-
-    if (_src_filename.empty())
-        throw app_table_not_loaded();
 
     return _src_filename;
 }
