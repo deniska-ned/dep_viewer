@@ -39,6 +39,8 @@ public:
                     const QModelIndex &parent = QModelIndex()) override;
     bool removeRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) override;
+    bool insertDepartment(QModelIndex curr_index);
+    bool insertEmployee(QModelIndex curr_index);
 
     void setVectorDataAsTree(std::shared_ptr<std::vector<department>> dep_ptr);
     std::shared_ptr<std::vector<department>> getTreeDataAsVector();
