@@ -63,6 +63,6 @@ private slots:
     void on_actionInsertDepartment_triggered();
     void on_actionRemoveRow_triggered();
 
-    void onvaluechanged();
+    void onUserCellChanges();
 };
 #endif // MAINWINDOW_H

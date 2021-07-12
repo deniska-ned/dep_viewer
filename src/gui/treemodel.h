@@ -46,7 +46,7 @@ public:
     std::shared_ptr<std::vector<department>> getTreeDataAsVector();
 
 signals:
-    void treeUpdated();
+    void cellUpdatedByUser();
 
 private:
     TreeItem *getItem(const QModelIndex &index) const;

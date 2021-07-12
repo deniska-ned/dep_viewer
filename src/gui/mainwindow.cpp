@@ -26,8 +26,8 @@ mainwindow::mainwindow(QWidget *parent)
 
     _ui->treeView->setModel(_model_ptr.get());
 
-    connect(_model_ptr.get(), &TreeModel::treeUpdated,
-            this, &mainwindow::onvaluechanged);
+    connect(_model_ptr.get(), &TreeModel::cellUpdatedByUser,
+            this, &mainwindow::onUserCellChanges);
 }
 
 mainwindow::~mainwindow()
@@ -119,6 +119,8 @@ void mainwindow::on_actionInsertEmployer_triggered()
     const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
 
     _model_ptr->insertEmployee(index);
+
+    execute_command(_update_command_ptr);
 }
 
 void mainwindow::on_actionInsertDepartment_triggered()
@@ -127,9 +129,11 @@ void mainwindow::on_actionInsertDepartment_triggered()
     const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
 
     _model_ptr->insertDepartment(index);
+
+    execute_command(_update_command_ptr);
 }
 
-void mainwindow::onvaluechanged()
+void mainwindow::onUserCellChanges()
 {
     qDebug("called");
     execute_command(_update_command_ptr);
@@ -141,4 +145,6 @@ void mainwindow::on_actionRemoveRow_triggered()
 
     const QModelIndex index = _ui->treeView->selectionModel()->currentIndex();
     _model_ptr->removeRow(index.row(), index.parent());
+
+    execute_command(_update_command_ptr);
 }
