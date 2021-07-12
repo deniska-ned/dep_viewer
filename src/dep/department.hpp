@@ -28,24 +28,24 @@ public:
     void replace_employments(InputIt begin, InputIt end);
 
 private:
-    std::string _name;
-    double _avg_salary = 0.0;
-    std::vector<employment> _employments;
+    std::string name_;
+    double avg_salary_ = 0.0;
+    std::vector<employment> employments_;
 
-    void _avg_salary_update();
-    void _avg_salary_rem_emp(int his_salary, std::size_t new_employment_count);
-    void _avg_salary_app_emp(int his_salary, std::size_t new_employment_count);
+    void avg_salary_update();
+    void avg_salary_rem_emp(int his_salary, std::size_t new_employment_count);
+    void avg_salary_app_emp(int his_salary, std::size_t new_employment_count);
 };
 
 template<class InputIt>
 void department::replace_employments(InputIt begin, InputIt end)
 {
-    _employments.clear();
+    employments_.clear();
 
     for (InputIt it = begin; it != end; ++it)
-        _employments.push_back(*it);
+        employments_.push_back(*it);
 
-    _avg_salary_update();
+    avg_salary_update();
 }
 
 #endif // DEPARTMENT_H

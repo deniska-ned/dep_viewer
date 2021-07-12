@@ -18,7 +18,7 @@ TreeModel::TreeModel(std::shared_ptr<std::vector<department>> dep_ptr)
                               "Ср. зарплата / Зарплата"
                             });
 
-    setVectorDataAsTree(dep_ptr);
+    replaceAllData(dep_ptr);
 }
 
 TreeModel::~TreeModel()
@@ -232,10 +232,10 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void TreeModel::setVectorDataAsTree(
+void TreeModel::replaceAllData(
         std::shared_ptr<std::vector<department>> dep_ptr)
 {
-    removeRows(0, rowCount());
+    removeRows(0, rowCount(QModelIndex()), QModelIndex());
 
     if (nullptr == dep_ptr)
         return;
@@ -276,7 +276,7 @@ void TreeModel::setVectorDataAsTree(
     }
 }
 
-std::shared_ptr<std::vector<department>> TreeModel::getTreeDataAsVector()
+std::shared_ptr<std::vector<department>> TreeModel::getAllData()
 {
     auto departments_ptr = std::make_shared<std::vector<department>>();
 

@@ -8,22 +8,22 @@ bool load_command::execute()
 {
     bool res = false;
 
-    std::string filename = _tableowner->get_load_filename();
+    std::string filename = tableowner_->get_load_filename();
 
     if (filename.empty()) {
-        _tableowner->show_message("File is not selected");
+        tableowner_->show_message("File is not selected");
         res = false;
     }
     else
     {
-        _tableowner->set_save_filename(filename);
+        tableowner_->set_save_filename(filename);
 
         std::shared_ptr<std::vector<department>> tdata;
         tdata = load_manager_creator().get_manager()->load(filename);
 
-        _tableowner->set_table_data(tdata);
+        tableowner_->set_table_data(tdata);
 
-        _make_backup();
+        make_backup();
 
         res = true;
     }

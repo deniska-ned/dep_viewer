@@ -5,9 +5,9 @@
 
 bool update_command::execute()
 {
-    auto tdata = _tableowner->get_table_data();
+    auto tdata = tableowner_->get_table_data();
 
-    _make_backup();
+    make_backup();
 
     return true;
 }

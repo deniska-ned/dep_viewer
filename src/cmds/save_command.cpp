@@ -6,15 +6,15 @@
 
 bool save_command::execute()
 {
-    std::string filename = _tableowner->get_save_filename();
+    std::string filename = tableowner_->get_save_filename();
 
     if (filename.empty())
     {
-        _tableowner->show_message("Load file first");
+        tableowner_->show_message("Load file first");
     }
     else
     {
-        auto tdata = _tableowner->get_table_data();
+        auto tdata = tableowner_->get_table_data();
         load_manager_creator().get_manager()->save(filename, tdata);
     }
 

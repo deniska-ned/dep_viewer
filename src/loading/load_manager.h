@@ -19,7 +19,7 @@ public:
               std::shared_ptr<std::vector<department>> departments) const;
 
 private:
-    std::shared_ptr<base_loader> _loader_ptr = \
+    std::shared_ptr<base_loader> loader_ptr_ = \
     std::make_shared<pugixml_loader_adapter>();
 };
 
