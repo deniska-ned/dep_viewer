@@ -28,6 +28,8 @@ mainwindow::mainwindow(QWidget *parent)
 
     connect(_model_ptr.get(), &TreeModel::cellUpdatedByUser,
             this, &mainwindow::onUserCellChanges);
+
+    execute_command(_update_command_ptr);
 }
 
 mainwindow::~mainwindow()
