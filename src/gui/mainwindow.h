@@ -34,6 +34,7 @@ public:
 
     std::string get_load_filename() override;
     std::string get_save_filename() override;
+    void set_save_filename(std::string const& filename);
 
     void show_message(std::string const& mes) override;
 

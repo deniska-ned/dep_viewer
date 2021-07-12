@@ -52,5 +52,34 @@ std::shared_ptr<std::vector<department>> pugixml_loader_adapter::load(
 void pugixml_loader_adapter::save(std::string const& filename,
                                   std::shared_ptr<std::vector<department>> departments)
 {
-    // TODO: implement saving
+    pugi::xml_document doc;
+
+    pugi::xml_node deps_node = doc.append_child("departments");
+
+    for (auto const& dep: *departments)
+    {
+        pugi::xml_node dep_node = deps_node.append_child("department");
+
+        dep_node.append_attribute("name") = dep.name().c_str();
+
+        pugi::xml_node emps_node = dep_node.append_child("employments");
+
+        for (auto const& emp: dep.get_employments())
+        {
+            pugi::xml_node emp_node = emps_node.append_child("employment");
+
+            emp_node.append_child("surname").text() = emp.surname().c_str();
+            emp_node.append_child("name").text() = emp.name().c_str();
+            emp_node.append_child("middleName").text() = emp.middle_name().c_str();
+            emp_node.append_child("function").text() = emp.function().c_str();
+            emp_node.append_child("salary").text() = std::to_string(emp.salary()).c_str();
+        }
+    }
+
+    pugi::xml_node decl = doc.prepend_child(pugi::node_declaration);
+    decl.append_attribute("version") = "1.0";
+    decl.append_attribute("encoding") = "UTF-8";
+
+    doc.save_file(filename.c_str(), "   ", pugi::format_default,
+                  pugi::encoding_utf8);
 }

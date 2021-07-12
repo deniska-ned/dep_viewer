@@ -7,6 +7,7 @@
 bool load_command::execute()
 {
     std::string filename = _tableowner->get_load_filename();
+    _tableowner->set_save_filename(filename);
 
     std::shared_ptr<std::vector<department>> tdata;
     tdata = load_manager_creator().get_manager()->load(filename);
