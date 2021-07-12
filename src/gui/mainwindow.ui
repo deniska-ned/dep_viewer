@@ -56,35 +56,56 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionUndo">
    <property name="text">
     <string>Undo</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
+   </property>
   </action>
   <action name="actionRedo">
    <property name="text">
     <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
    </property>
   </action>
   <action name="actionInsertEmployer">
    <property name="text">
     <string>Insert employer</string>
    </property>
+   <property name="shortcut">
+    <string>Ins, E</string>
+   </property>
   </action>
   <action name="actionInsertDepartment">
    <property name="text">
     <string>Insert department</string>
    </property>
+   <property name="shortcut">
+    <string>Ins, D</string>
+   </property>
   </action>
   <action name="actionRemoveRow">
    <property name="text">
     <string>Remove row</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

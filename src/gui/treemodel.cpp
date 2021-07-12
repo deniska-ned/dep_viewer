@@ -350,11 +350,11 @@ bool TreeModel::insertDepartment(QModelIndex curr_index)
     }
     else if (DEPA_DEPTH == depth)
     {
-        res = insertRows(curr_index.row(), 1, curr_index.parent());
+        res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
     }
     else if (EMPL_DEPTH == depth)
     {
-        res = insertRows(curr_index.parent().row(), 1, curr_index.parent().parent());
+        res = insertRows(curr_index.parent().row() + 1, 1, curr_index.parent().parent());
     }
 
     return res;
@@ -374,7 +374,7 @@ bool TreeModel::insertEmployee(QModelIndex curr_index)
     }
     else if (EMPL_DEPTH == depth)
     {
-        res = insertRows(curr_index.column(), 1, curr_index.parent());
+        res = insertRows(curr_index.row() + 1, 1, curr_index.parent());
     }
 
     return res;
