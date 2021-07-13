@@ -2,6 +2,7 @@
 #include "treeitem.h"
 
 #include <QtWidgets>
+#include <QRegularExpression>
 
 #define DEP_COL_COUNT   3
 #define EMP_COL_COUNT   3
@@ -179,14 +180,28 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
     TreeItem *item = getItem(index);
 
-    if (EMPL_DEPTH == depth && 0 == index.column()
-        && 3 != value.toString().split(" ").count())
-    // TODO: make check more strict
+    if (EMPL_DEPTH == depth && 0 == index.column())
     {
-        qInfo("Surname name middlename should be writted as 3 separated words");
-        // return the previous data
-        result = item->setData(index.column(), item->data(index.column()));
-        shouldBackup = false;
+        QRegularExpression re(R"(^(?<surname>\w+) (?<name>\w+) (?<middlename>\w+$))",
+                              QRegularExpression::UseUnicodePropertiesOption);
+
+        if (re.match(value.toString()).hasMatch())
+        {
+            result = item->setData(index.column(), value);
+            shouldBackup = true;
+        }
+        else
+        {
+            qInfo("Surname name middlename should be writted as 3 separated words");
+            // return the previous data
+            result = item->setData(index.column(), item->data(index.column()));
+            shouldBackup= false;
+        }
+
+        if (result)
+        {
+            emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
+        }
     }
     else if (EMPL_DEPTH == depth && 2 == index.column())
     {
@@ -292,13 +307,25 @@ std::shared_ptr<std::vector<department>> TreeModel::getAllData()
         {
             TreeItem *emp_item_ptr = dep_item_ptr->child(emp_i);
 
-            auto emp_snm_l = emp_item_ptr->data(0).toString().split(" ");
-            std::string emp_surname = (emp_snm_l.count() > 0 ?
-                                       emp_snm_l[0].toStdString() : "");
-            std::string emp_name = (emp_snm_l.count() > 1 ?
-                                    emp_snm_l[1].toStdString() : "");
-            std::string emp_middlename = (emp_snm_l.count() > 2 ?
-                                          emp_snm_l[2].toStdString() : "");
+            QRegularExpression re(R"(^(?<surname>\w+) (?<name>\w+) (?<middlename>\w+$))",
+                                  QRegularExpression::UseUnicodePropertiesOption);
+
+            std::string emp_surname, emp_name, emp_middlename;
+
+            auto match = re.match(emp_item_ptr->data(0).toString());
+
+            if (match.hasMatch())
+            {
+                emp_surname = match.captured("surname").toStdString();
+                emp_name = match.captured("name").toStdString();
+                emp_middlename = match.captured("middlename").toStdString();
+            }
+            else
+            {
+                emp_surname = std::string("-");
+                emp_name = std::string("-");
+                emp_middlename = std::string("-");
+            }
 
             std::string emp_function = emp_item_ptr->data(1).toString().toStdString();
             int emp_salary = emp_item_ptr->data(2).toInt();
