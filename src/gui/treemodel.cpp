@@ -86,7 +86,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     if (DEPA_DEPTH == getDepth(index)
-            && (1 == index.column() || 2 == index.column()))
+        && (1 == index.column() || 2 == index.column()))
         return QAbstractItemModel::flags(index);
     else
         return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
@@ -125,15 +125,17 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 
 bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    TreeItem *parentItem = getItem(parent);
-    if (!parentItem)
-        return false;
+    bool success = false;
 
-    beginInsertRows(parent, position, position + rows - 1);
-    const bool success = parentItem->insertChildren(position,
-                                                    rows,
-                                                    rootItem->columnCount());
-    endInsertRows();
+    TreeItem *parentItem = getItem(parent);
+
+    if (0 != rows && nullptr != parentItem)
+    {
+        beginInsertRows(parent, position, position + rows - 1);
+        success = parentItem->insertChildren(position, rows,
+                                             rootItem->columnCount());
+        endInsertRows();
+    }
 
     return success;
 }
@@ -154,13 +156,16 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
 
 bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
-    TreeItem *parentItem = getItem(parent);
-    if (!parentItem)
-        return false;
+    bool success = false;
 
-    beginRemoveRows(parent, position, position + rows - 1);
-    const bool success = parentItem->removeChildren(position, rows);
-    endRemoveRows();
+    TreeItem *parentItem = getItem(parent);
+
+    if (0 != rows && nullptr != parentItem)
+    {
+        beginRemoveRows(parent, position, position + rows - 1);
+        success = parentItem->removeChildren(position, rows);
+        endRemoveRows();
+    }
 
     return success;
 }
@@ -301,6 +306,8 @@ void TreeModel::replaceAllData(
             emp_item_ptr->setData(2, salary);
         }
     }
+
+    emit layoutChanged();
 }
 
 std::shared_ptr<std::vector<department>> TreeModel::getAllData()
