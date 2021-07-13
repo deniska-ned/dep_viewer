@@ -1,7 +1,7 @@
 #include "load_command.h"
 
 #include "load_manager_creator.h"
-#include "department_manager_creator.h"
+#include "cmdhistory_manager_creator.h"
 
 
 bool load_command::execute()
@@ -16,6 +16,8 @@ bool load_command::execute()
     }
     else
     {
+        cmdhistory_manager_creator().get_manager()->clear_history();
+
         tableowner_->set_opened_filename(filename);
 
         std::shared_ptr<std::vector<department>> tdata;

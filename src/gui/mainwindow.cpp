@@ -15,6 +15,7 @@ mainwindow::mainwindow(QWidget *parent)
 {
     ui_->setupUi(this);
 
+    new_file_command_ptr_ = std::make_shared<new_file_command>(this);
     load_command_ptr_ = std::make_shared<load_command>(this);
     update_command_ptr_ = std::make_shared<update_command>(this);
     save_command_ptr_ = std::make_shared<save_command>(this);
@@ -103,6 +104,13 @@ void mainwindow::react_to_user_cell_changes()
 {
     qDebug("called");
     execute_command(update_command_ptr_);
+}
+
+void mainwindow::on_actionNew_triggered()
+{
+    qDebug("clicked");
+    
+    execute_command(new_file_command_ptr_);
 }
 
 void mainwindow::on_actionOpen_triggered()

@@ -20,6 +20,8 @@ public:
     bool has_next();
     void goto_next();
 
+    void clear_history();
+
 private:
     std::deque<std::shared_ptr<base_command>> deque_;
 

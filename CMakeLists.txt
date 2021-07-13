@@ -35,14 +35,16 @@ add_executable(dep_viewer
         src/cmdhistory/cmdhistory_manager_creator.h
         src/cmdhistory/cmdhistory_manager_creator.cpp
 
+        src/cmds/new_file_command.h
+        src/cmds/new_file_command.cpp
         src/cmds/load_command.h
         src/cmds/load_command.cpp
         src/cmds/update_command.h
         src/cmds/update_command.cpp
         src/cmds/save_command.h
         src/cmds/save_command.cpp
-        src/cmds/save_as_command.cpp
         src/cmds/save_as_command.h
+        src/cmds/save_as_command.cpp
         src/cmds/undo_command.h
         src/cmds/undo_command.cpp
         src/cmds/redo_command.h

@@ -7,6 +7,8 @@
 #include <QMainWindow>
 
 #include "i_tableowner.h"
+
+#include "new_file_command.h"
 #include "load_command.h"
 #include "redo_command.h"
 #include "save_command.h"
@@ -43,6 +45,7 @@ public:
 private:
     std::shared_ptr<Ui::mainwindow> ui_;
 
+    std::shared_ptr<new_file_command> new_file_command_ptr_;
     std::shared_ptr<load_command> load_command_ptr_;
     std::shared_ptr<redo_command> redo_command_ptr_;
     std::shared_ptr<save_command> save_command_ptr_;
@@ -59,6 +62,7 @@ private:
     void react_to_user_cell_changes();
 
 private slots:
+    void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();

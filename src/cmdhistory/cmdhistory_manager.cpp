@@ -36,3 +36,9 @@ void cmdhistory_manager::goto_next()
     ++next_i_;
     deque_[next_i_ - 1]->undo();
 }
+
+void cmdhistory_manager::clear_history()
+{
+    deque_.clear();
+    next_i_ = 0;
+}
