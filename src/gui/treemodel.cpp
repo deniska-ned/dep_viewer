@@ -2,6 +2,7 @@
 #include "treeitem.h"
 
 #include <QtWidgets>
+#include <QRegularExpression>
 
 #define DEP_COL_COUNT   3
 #define EMP_COL_COUNT   3
@@ -62,8 +63,15 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     else if (DEPA_DEPTH == depth && 2 == index.column())
     {
         TreeItem *dep = getItem(index);
-        double avg_salary = dep->countAvgSalary();
-        return QVariant(avg_salary);
+        if (0 == dep->childCount())
+        {
+            return QVariant("No employees");
+        }
+        else
+        {
+            double avg_salary = dep->countAvgSalary();
+            return QVariant(avg_salary);
+        }
     }
     else
     {
@@ -78,7 +86,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     if (DEPA_DEPTH == getDepth(index)
-            && (1 == index.column() || 2 == index.column()))
+        && (1 == index.column() || 2 == index.column()))
         return QAbstractItemModel::flags(index);
     else
         return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
@@ -117,15 +125,17 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 
 bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    TreeItem *parentItem = getItem(parent);
-    if (!parentItem)
-        return false;
+    bool success = false;
 
-    beginInsertRows(parent, position, position + rows - 1);
-    const bool success = parentItem->insertChildren(position,
-                                                    rows,
-                                                    rootItem->columnCount());
-    endInsertRows();
+    TreeItem *parentItem = getItem(parent);
+
+    if (0 != rows && nullptr != parentItem)
+    {
+        beginInsertRows(parent, position, position + rows - 1);
+        success = parentItem->insertChildren(position, rows,
+                                             rootItem->columnCount());
+        endInsertRows();
+    }
 
     return success;
 }
@@ -146,13 +156,16 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
 
 bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
-    TreeItem *parentItem = getItem(parent);
-    if (!parentItem)
-        return false;
+    bool success = false;
 
-    beginRemoveRows(parent, position, position + rows - 1);
-    const bool success = parentItem->removeChildren(position, rows);
-    endRemoveRows();
+    TreeItem *parentItem = getItem(parent);
+
+    if (0 != rows && nullptr != parentItem)
+    {
+        beginRemoveRows(parent, position, position + rows - 1);
+        success = parentItem->removeChildren(position, rows);
+        endRemoveRows();
+    }
 
     return success;
 }
@@ -179,14 +192,33 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
     TreeItem *item = getItem(index);
 
-    if (EMPL_DEPTH == depth && 0 == index.column()
-        && 3 != value.toString().split(" ").count())
-    // TODO: make check more strict
+    if (item->data(index.column()) == value)
     {
-        qInfo("Surname name middlename should be writted as 3 separated words");
-        // return the previous data
-        result = item->setData(index.column(), item->data(index.column()));
-        shouldBackup = false;
+        return false;
+    }
+
+    if (EMPL_DEPTH == depth && 0 == index.column())
+    {
+        QRegularExpression re(R"(^(?<surname>\w+) (?<name>\w+) (?<middlename>\w+$))",
+                              QRegularExpression::UseUnicodePropertiesOption);
+
+        if (re.match(value.toString()).hasMatch())
+        {
+            result = item->setData(index.column(), value);
+            shouldBackup = true;
+        }
+        else
+        {
+            qInfo("Surname name middlename should be writted as 3 separated words");
+            // return the previous data
+            result = item->setData(index.column(), item->data(index.column()));
+            shouldBackup= false;
+        }
+
+        if (result)
+        {
+            emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
+        }
     }
     else if (EMPL_DEPTH == depth && 2 == index.column())
     {
@@ -267,13 +299,15 @@ void TreeModel::replaceAllData(
                     + emp.name() + " "
                     + emp.middle_name()));
             QVariant function(QString::fromStdString(emp.function()));
-            QVariant salary(emp.salary());
+            QVariant salary((uint) emp.salary());
 
             emp_item_ptr->setData(0, snm);
             emp_item_ptr->setData(1, function);
             emp_item_ptr->setData(2, salary);
         }
     }
+
+    emit layoutChanged();
 }
 
 std::shared_ptr<std::vector<department>> TreeModel::getAllData()
@@ -292,13 +326,25 @@ std::shared_ptr<std::vector<department>> TreeModel::getAllData()
         {
             TreeItem *emp_item_ptr = dep_item_ptr->child(emp_i);
 
-            auto emp_snm_l = emp_item_ptr->data(0).toString().split(" ");
-            std::string emp_surname = (emp_snm_l.count() > 0 ?
-                                       emp_snm_l[0].toStdString() : "");
-            std::string emp_name = (emp_snm_l.count() > 1 ?
-                                    emp_snm_l[1].toStdString() : "");
-            std::string emp_middlename = (emp_snm_l.count() > 2 ?
-                                          emp_snm_l[2].toStdString() : "");
+            QRegularExpression re(R"(^(?<surname>\w+) (?<name>\w+) (?<middlename>\w+$))",
+                                  QRegularExpression::UseUnicodePropertiesOption);
+
+            std::string emp_surname, emp_name, emp_middlename;
+
+            auto match = re.match(emp_item_ptr->data(0).toString());
+
+            if (match.hasMatch())
+            {
+                emp_surname = match.captured("surname").toStdString();
+                emp_name = match.captured("name").toStdString();
+                emp_middlename = match.captured("middlename").toStdString();
+            }
+            else
+            {
+                emp_surname = std::string("-");
+                emp_name = std::string("-");
+                emp_middlename = std::string("-");
+            }
 
             std::string emp_function = emp_item_ptr->data(1).toString().toStdString();
             int emp_salary = emp_item_ptr->data(2).toInt();
@@ -389,7 +435,7 @@ bool TreeModel::insertEmployee(QModelIndex curr_index)
         {
             item->setData(0, QVariant(QString("Фамилия Имя Отчество")));
             item->setData(1, QVariant(QString("Должность")));
-            item->setData(2, QVariant(0));
+            item->setData(2, QVariant((uint) 0));
         }
     }
 
