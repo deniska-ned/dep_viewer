@@ -32,9 +32,10 @@ public:
     void set_table_data(
             std::shared_ptr<std::vector<department>> departments) override;
 
-    std::string get_load_filename() override;
-    std::string get_save_filename() override;
-    void set_save_filename(std::string const& filename) override;
+    std::string get_opened_filename() override;
+    void set_opened_filename(std::string const& new_filename) override;
+    std::string get_new_open_filename() override;
+    std::string get_new_save_filename() override;
 
     void show_message(std::string const& mes) override;
 
@@ -48,7 +49,7 @@ private:
     std::shared_ptr<undo_command> undo_command_ptr_;
     std::shared_ptr<update_command> update_command_ptr_;
 
-    std::string src_filename_;
+    std::string opened_filename_;
 
     std::shared_ptr<TreeModel> model_ptr_;
 

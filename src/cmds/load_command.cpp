@@ -8,7 +8,7 @@ bool load_command::execute()
 {
     bool res = false;
 
-    std::string filename = tableowner_->get_load_filename();
+    std::string filename = tableowner_->get_new_open_filename();
 
     if (filename.empty()) {
         tableowner_->show_message("File is not selected");
@@ -16,7 +16,7 @@ bool load_command::execute()
     }
     else
     {
-        tableowner_->set_save_filename(filename);
+        tableowner_->set_opened_filename(filename);
 
         std::shared_ptr<std::vector<department>> tdata;
         tdata = load_manager_creator().get_manager()->load(filename);

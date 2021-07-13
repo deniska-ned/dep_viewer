@@ -50,7 +50,17 @@ void mainwindow::set_table_data(
     model_ptr_->replaceAllData(departments);
 }
 
-std::string mainwindow::get_load_filename()
+std::string mainwindow::get_opened_filename()
+{
+    return opened_filename_;
+}
+
+void mainwindow::set_opened_filename(std::string const& new_filename)
+{
+    opened_filename_ = new_filename;
+}
+
+std::string mainwindow::get_new_open_filename()
 {
     qDebug("called");
 
@@ -60,16 +70,14 @@ std::string mainwindow::get_load_filename()
     return filename;
 }
 
-std::string mainwindow::get_save_filename()
+std::string mainwindow::get_new_save_filename()
 {
     qDebug("called");
 
-    return src_filename_;
-}
+    QString qstr_filename = QFileDialog::getSaveFileName();
 
-void mainwindow::set_save_filename(std::string const& filename)
-{
-    src_filename_ = filename;
+    std::string filename(qstr_filename.toUtf8().data());
+    return filename;
 }
 
 void mainwindow::show_message(std::string const& mes)

@@ -6,11 +6,16 @@
 
 bool save_command::execute()
 {
-    std::string filename = tableowner_->get_save_filename();
+    std::string filename = tableowner_->get_opened_filename();
 
     if (filename.empty())
     {
-        tableowner_->show_message("Load file first");
+        filename = tableowner_->get_new_save_filename();
+    }
+
+    if (filename.empty())
+    {
+        tableowner_->show_message("Save file name is not selected");
     }
     else
     {
