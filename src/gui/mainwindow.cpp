@@ -18,6 +18,7 @@ mainwindow::mainwindow(QWidget *parent)
     load_command_ptr_ = std::make_shared<load_command>(this);
     update_command_ptr_ = std::make_shared<update_command>(this);
     save_command_ptr_ = std::make_shared<save_command>(this);
+    save_as_command_ptr_ = std::make_shared<save_as_command>(this);
     showdata_command_ptr_ = std::make_shared<showdata_command>(this);
     undo_command_ptr_ = std::make_shared<undo_command>(this);
     redo_command_ptr_ = std::make_shared<redo_command>(this);
@@ -50,7 +51,17 @@ void mainwindow::set_table_data(
     model_ptr_->replaceAllData(departments);
 }
 
-std::string mainwindow::get_load_filename()
+std::string mainwindow::get_opened_filename()
+{
+    return opened_filename_;
+}
+
+void mainwindow::set_opened_filename(std::string const& new_filename)
+{
+    opened_filename_ = new_filename;
+}
+
+std::string mainwindow::get_new_open_filename()
 {
     qDebug("called");
 
@@ -60,16 +71,14 @@ std::string mainwindow::get_load_filename()
     return filename;
 }
 
-std::string mainwindow::get_save_filename()
+std::string mainwindow::get_new_save_filename()
 {
     qDebug("called");
 
-    return src_filename_;
-}
+    QString qstr_filename = QFileDialog::getSaveFileName();
 
-void mainwindow::set_save_filename(std::string const& filename)
-{
-    src_filename_ = filename;
+    std::string filename(qstr_filename.toUtf8().data());
+    return filename;
 }
 
 void mainwindow::show_message(std::string const& mes)
@@ -107,6 +116,12 @@ void mainwindow::on_actionSave_triggered()
 {
     qDebug("clicked");
     execute_command(save_command_ptr_);
+}
+
+void mainwindow::on_actionSaveAs_triggered()
+{
+    qDebug("clicked");
+    execute_command(save_as_command_ptr_);
 }
 
 void mainwindow::on_actionUndo_triggered()
