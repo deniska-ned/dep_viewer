@@ -10,6 +10,7 @@
 #include "load_command.h"
 #include "redo_command.h"
 #include "save_command.h"
+#include "save_as_command.h"
 #include "showdata_command.h"
 #include "undo_command.h"
 #include "update_command.h"
@@ -45,6 +46,7 @@ private:
     std::shared_ptr<load_command> load_command_ptr_;
     std::shared_ptr<redo_command> redo_command_ptr_;
     std::shared_ptr<save_command> save_command_ptr_;
+    std::shared_ptr<save_as_command> save_as_command_ptr_;
     std::shared_ptr<showdata_command> showdata_command_ptr_;
     std::shared_ptr<undo_command> undo_command_ptr_;
     std::shared_ptr<update_command> update_command_ptr_;
@@ -59,6 +61,7 @@ private:
 private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
+    void on_actionSaveAs_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
     void on_actionInsertEmployer_triggered();

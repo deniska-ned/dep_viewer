@@ -18,6 +18,7 @@ mainwindow::mainwindow(QWidget *parent)
     load_command_ptr_ = std::make_shared<load_command>(this);
     update_command_ptr_ = std::make_shared<update_command>(this);
     save_command_ptr_ = std::make_shared<save_command>(this);
+    save_as_command_ptr_ = std::make_shared<save_as_command>(this);
     showdata_command_ptr_ = std::make_shared<showdata_command>(this);
     undo_command_ptr_ = std::make_shared<undo_command>(this);
     redo_command_ptr_ = std::make_shared<redo_command>(this);
@@ -115,6 +116,12 @@ void mainwindow::on_actionSave_triggered()
 {
     qDebug("clicked");
     execute_command(save_command_ptr_);
+}
+
+void mainwindow::on_actionSaveAs_triggered()
+{
+    qDebug("clicked");
+    execute_command(save_as_command_ptr_);
 }
 
 void mainwindow::on_actionUndo_triggered()
