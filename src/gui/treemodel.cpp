@@ -63,8 +63,15 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     else if (DEPA_DEPTH == depth && 2 == index.column())
     {
         TreeItem *dep = getItem(index);
-        double avg_salary = dep->countAvgSalary();
-        return QVariant(avg_salary);
+        if (0 == dep->childCount())
+        {
+            return QVariant("No employees");
+        }
+        else
+        {
+            double avg_salary = dep->countAvgSalary();
+            return QVariant(avg_salary);
+        }
     }
     else
     {
