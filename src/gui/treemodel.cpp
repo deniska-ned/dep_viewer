@@ -180,6 +180,11 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
     TreeItem *item = getItem(index);
 
+    if (item->data(index.column()) == value)
+    {
+        return false;
+    }
+
     if (EMPL_DEPTH == depth && 0 == index.column())
     {
         QRegularExpression re(R"(^(?<surname>\w+) (?<name>\w+) (?<middlename>\w+$))",
