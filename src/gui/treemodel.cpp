@@ -267,7 +267,7 @@ void TreeModel::replaceAllData(
                     + emp.name() + " "
                     + emp.middle_name()));
             QVariant function(QString::fromStdString(emp.function()));
-            QVariant salary(emp.salary());
+            QVariant salary((uint) emp.salary());
 
             emp_item_ptr->setData(0, snm);
             emp_item_ptr->setData(1, function);
@@ -389,7 +389,7 @@ bool TreeModel::insertEmployee(QModelIndex curr_index)
         {
             item->setData(0, QVariant(QString("Фамилия Имя Отчество")));
             item->setData(1, QVariant(QString("Должность")));
-            item->setData(2, QVariant(0));
+            item->setData(2, QVariant((uint) 0));
         }
     }
 
